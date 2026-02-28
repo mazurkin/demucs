@@ -13,5 +13,6 @@ $ make env-init-poetry
 ## run
 
 ```shell
+# run stem separation, check the "separated/htdemucs" folder after
 bin/demucs.sh -v --name htdemucs "song.mp3"
 ```
