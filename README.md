@@ -1,5 +1,7 @@
 # demucs environment
 
+Conda environment and bootstrap scripts for [FaceBook DEMUCS](https://github.com/facebookresearch/demucs)
+
 ## install
 
 ```shell
