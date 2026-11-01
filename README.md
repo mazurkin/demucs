@@ -5,11 +5,11 @@ Conda environment and bootstrap scripts for [FaceBook DEMUCS](https://github.com
 ## install
 
 ```shell
-# first, make an isolated Conda environment with Python, Poetry and CUDA inside
-$ make env-init-conda
+# conda env + python + poetry
+$ make env-create
 
-# then install the most of the dependencies with Poetry
-$ make env-init-poetry
+# packages
+$ make env-poetry-install
 ```
 
 ## run

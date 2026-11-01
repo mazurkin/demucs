@@ -1,7 +1,13 @@
-SHELL := /bin/bash
-ROOT  := $(shell dirname $(realpath $(firstword $(MAKEFILE_LIST))))
+SHELL            := /bin/bash
+ROOT             := $(shell dirname $(realpath $(firstword $(MAKEFILE_LIST))))
+DATE             := $(shell date '+%Y%m%d-%H%M%S')
 
-CONDA_ENV_NAME = demucs
+CONDA_ENV_NAME    = demucs
+
+CUDA_VERSION      = 13.1.0
+PYTHON_VERSION    = 3.12.15
+POETRY_VERSION    = 2.5.1
+FFMPEG_VERSION    = 8.1.2
 
 # -----------------------------------------------------------------------------
 # notebook
@@ -13,28 +19,38 @@ CONDA_ENV_NAME = demucs
 # conda environment
 # -----------------------------------------------------------------------------
 
-.PHONY: env-init-conda
-env-init-conda:
+.PHONY: env-create
+env-create:
 	@conda create --yes --copy --name "$(CONDA_ENV_NAME)" \
-		conda-forge::python=3.12.12 \
-		conda-forge::poetry=2.2.1 \
-		conda-forge::ffmpeg==5.1.2 \
-		nvidia::cuda=13.0.2
+		conda-forge::python=$(PYTHON_VERSION) \
+		conda-forge::poetry=$(POETRY_VERSION) \
+		conda-forge::ffmpeg=$(FFMPEG_VERSION) \
+		conda-forge::cuda=$(CUDA_VERSION)
 
-.PHONY: env-init-poetry
-env-init-poetry:
+.PHONY: env-poetry-install
+env-poetry-install: export PYTHONWARNINGS = ignore::DeprecationWarning
+env-poetry-install:
 	@conda run --no-capture-output --live-stream --name "$(CONDA_ENV_NAME)" \
-		poetry install --no-root --no-directory
+		poetry install \
+          	--no-interaction \
+          	--no-ansi \
+          	--no-root \
+			--no-directory
 
-.PHONY: env-update
-env-update:
+.PHONY: env-poetry-update
+env-poetry-update: export PYTHONWARNINGS = ignore::DeprecationWarning
+env-poetry-update:
 	@conda run --no-capture-output --live-stream --name "$(CONDA_ENV_NAME)" \
 		poetry update
 
-.PHONY: env-list
-env-list:
+.PHONY: env-poetry-show
+env-poetry-show:
+	@bin/run poetry show --tree
+
+.PHONY: env-poetry-lock
+env-poetry-lock:
 	@conda run --no-capture-output --live-stream --name "$(CONDA_ENV_NAME)" \
-		poetry show
+		poetry lock --no-update
 
 .PHONY: env-remove
 env-remove:
