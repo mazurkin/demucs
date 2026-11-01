@@ -14,9 +14,11 @@ declare -r SCRIPT_DIR
 PACKAGE_DIR=$(dirname -- "${SCRIPT_DIR}")
 declare -r -x PACKAGE_DIR
 
+# python environment
 export PYTHONDONTWRITEBYTECODE="1"
 export PYTHONUNBUFFERED="1"
 export PYTHONWARNINGS="ignore"
 
-conda run --no-capture-output --live-stream --name demucs \
+# run the command
+exec conda run --no-capture-output --live-stream --name demucs \
     demucs "$@"
